@@ -6,7 +6,7 @@ const { join, resolve } = require('path');
 const process = require('process');
 const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
+const { responseInterceptor } = require('http-proxy-middleware');
 /**
  * The URL of the Jitsi Meet deployment to be proxy to in the context of
  * development with webpack-dev-server.
@@ -262,7 +262,17 @@ function getDevServerConfig() {
                 target: devServerProxyTarget,
                 headers: {
                     'Host': new URL(devServerProxyTarget).host
-                }
+                },
+                selfHandleResponse: true,
+                onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+                    const content = responseBuffer.toString('utf8');
+                    if (content.includes("http://schema.org/Product")) {
+                        return `<!DOCTYPE html>${
+                            content.replace('xmlns="http://www.w3.org/1999/html"', '')
+                        }`;
+                    }
+                    return responseBuffer
+                }),
             }
         },
         server: 'https',
