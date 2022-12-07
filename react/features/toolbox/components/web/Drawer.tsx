@@ -1,4 +1,5 @@
-import React, { ReactElement, useCallback } from 'react';
+import React, { KeyboardEvent, ReactElement, useCallback } from 'react';
+import ReactFocusLock from 'react-focus-lock';
 import { makeStyles } from 'tss-react/mui';
 
 import { DRAWER_MAX_HEIGHT } from '../../constants';
@@ -71,15 +72,32 @@ function Drawer({
         onClose();
     }, [ onClose ]);
 
+    /**
+     * Handles pressing the escape key, closing the drawer.
+     *
+     * @param {KeyboardEvent<HTMLDivElement>} event - The keydown event.
+     * @returns {void}
+     */
+    const handleEscKey = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            event.stopPropagation();
+            onClose();
+        }
+    }, [ onClose ]);
+
     return (
         isOpen ? (
             <div
                 className = 'drawer-menu-container'
-                onClick = { handleOutsideClick }>
+                onClick = { handleOutsideClick }
+                onKeyDown = { handleEscKey }>
                 <div
                     className = { `drawer-menu ${styles.drawer} ${className}` }
                     onClick = { handleInsideClick }>
-                    {children}
+                    <ReactFocusLock returnFocus = { true }>
+                        {children}
+                    </ReactFocusLock>
                 </div>
             </div>
         ) : null
