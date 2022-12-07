@@ -269,7 +269,9 @@ const Dialog = ({
             <div
                 className = { classes.backdrop }
                 onClick = { onBackdropClick } />
-            <FocusLock className = { classes.focusLock }>
+            <FocusLock
+                className = { classes.focusLock }
+                returnFocus = { true }>
                 <div
                     aria-describedby = { description }
                     aria-labelledby = { title ?? t(titleKey ?? '') }
