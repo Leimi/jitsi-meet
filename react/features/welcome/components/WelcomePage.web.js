@@ -415,6 +415,10 @@ class WelcomePage extends AbstractWelcomePage {
                 label: t('welcomepage.recentMeetings'),
                 content: <RecentList />
             });
+            tabs.push({
+                label: t('welcomepage.upcomingMeetings'),
+                content: <CalendarList />
+            });
         }
 
         if (tabs.length === 0) {
