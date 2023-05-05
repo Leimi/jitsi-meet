@@ -307,6 +307,7 @@ class Video extends Component<IProps> {
                 playsInline = { playsinline }
                 ref = { this._setVideoElement }
                 style = { style }
+                tabIndex = { -1 }
                 { ...eventHandlers } />
         );
     }
